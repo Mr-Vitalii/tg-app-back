@@ -1,64 +1,3 @@
-// import express from "express";
-// import cors from "cors";
-// import "dotenv/config";
-// import mongoose from "mongoose";
-
-// mongoose.connect(process.env.DB_HOST);
-
-// import userRoutes from "./src/routes/users.js";
-
-// const TelegramBot = require('node-telegram-bot-api');
-
-// import TelegramBot from 'node-telegram-bot-api';
-
-// const token = "7771190367:AAGilcd0p2bi9fRfSBzc6phDSSDtrtCz21g";
-
-// const webAppUrl = "https://super-tg-app.netlify.app";
-
-// const bot = new TelegramBot(token, { polling: true });
-
-// bot.on('message', async (msg) => {
-//     const chatId = msg.chat.id;
-//     const text = msg.text;
-
-//     if (text === "/start") {
-//         await bot.sendMessage(chatId, "Ниже появится сообщение", {
-//             reply_markup: {
-//                 inline_keyboard: [
-//                     [{ text: "Сделать заказ", web_app: { url: webAppUrl } }]
-//                 ]
-//             }
-//         })
-//     }
-
-//     await bot.sendMessage(chatId, "Заходи в наш интернет магазин по кнопке ниже", {
-//         reply_markup: {
-//             keyboard: [
-//                 [{ text: "Заполнить форму", web_app: { url: webAppUrl } }]
-//             ]
-//         }
-//     })
-// });
-
-// const app = express();
-
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(
-//     cors({
-//         origin: process.env.FRONTEND_URL,
-//         credentials: true,
-//     })
-// );
-
-// app.use("/api/users", userRoutes);
-
-// app.listen(5005, () => {
-//     console.log("server running on localhost:5005");
-// })
-
-
-
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const cors = require("cors");
@@ -84,6 +23,8 @@ bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
+
+  //* Кнопка которая в самом низу телеграм бота
   if (text === '/start') {
     await bot.sendMessage(chatId, 'Ниже появится кнопка, заполни форму', {
       reply_markup: {
@@ -93,6 +34,7 @@ bot.on("message", async (msg) => {
       }
     })
 
+    //* Кнопка которая появляется ниже приходящего сообщением 'Заходи в наш интернет магазин по кнопке ниже'
     await bot.sendMessage(chatId, 'Заходи в наш интернет магазин по кнопке ниже', {
       reply_markup: {
         inline_keyboard: [
@@ -103,7 +45,7 @@ bot.on("message", async (msg) => {
   }
 
 
-  // принятие данных с фронтенда
+  //* принятие данных с фронтенда
   if (msg?.web_app_data?.data) {
     try {
       const data = JSON.parse(msg?.web_app_data?.data)
@@ -119,12 +61,10 @@ bot.on("message", async (msg) => {
       console.log(e);
     }
   }
-
-
 });
 
-// app.use("/api/users", userRoutes);
 
+//* app.use("/api/users", userRoutes);
 app.post('/web-data', async (req, res) => {
   const { queryId, products = [], totalPrice } = req.body;
   try {
